@@ -19,6 +19,7 @@ namespace YesodeiFund.Data
         {
             var context = new FundDataContext(_connectionString);
             donation.TimesDonated = 1;
+            donation.EntryDate = DateTime.Now;
             context.GeneralDonations.Add(donation);
             context.SaveChanges();
         }
@@ -32,6 +33,7 @@ namespace YesodeiFund.Data
         public void AddSpecific(SpecificDonation donation)
         {
             var context = new FundDataContext(_connectionString);
+            donation.EntryDate = DateTime.Now;
             context.SpecificDonations.Add(donation);
             context.SaveChanges();
         }

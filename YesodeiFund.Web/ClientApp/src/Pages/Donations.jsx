@@ -10,12 +10,13 @@ const Donations = () => {
     const [searchText, setSearchText] = useState('')
     const [searchedDonations, setSearchedDonations] = useState([])
     const [givenChasunaIds, setGivenChasunaIds] = useState([])
+    const [chasunas, setChasunas] = useState([])
     const baseAmount = 2000
     let total = 0
     let totalGeneral = 0
 
     const generalDonations = donations.filter(d => !d.chasunaId)
-
+    const notGiven = chasunas.length - givenChasunaIds.length
     const availableDonations = donations.filter(d => !givenChasunaIds.includes(d.chasunaId))
 
     const getDonations = async () => {
@@ -28,18 +29,26 @@ const Donations = () => {
         setGivenChasunaIds(data)
     }
 
+    const getChasunas = async () => {
+        const { data } = await axios.get('/api/chasuna/get')
+        setChasunas(data)
+    }
+
     useEffect(() => {
         getDonations()
         getGivenChasunaIds()
+        getChasunas()
     }, [])
 
     for (let i = 0; i < availableDonations.length; i++) {
         total += availableDonations[i].amount * availableDonations[i].timesDonated
     }
 
-    for (let i = 0; i < generalDonations.length; i++) {
-        totalGeneral += (generalDonations[i].amount * generalDonations[i].timesDonated) - ((givenChasunaIds.length) * baseAmount)
-    }
+    // for (let i = 0; i < generalDonations.length; i++) {
+    //     const notGiven = chasunas.length - givenChasunaIds.length
+    //     totalGeneral += (generalDonations[i].amount * generalDonations[i].timesDonated) - ((notGiven * baseAmount))
+    //     totalGeneral += ((notGiven * baseAmount) - total)
+    // }
 
     const onAddMonthlyClick = async () => {
         await axios.post('/api/donations/add-monthly-to-total')
@@ -57,7 +66,7 @@ const Donations = () => {
                 <h1 className="col-md-10">Donations</h1>
                 <Link to="/view-monthly" className="col-md-3 btn btn-dark">View Monthly Donations</Link>
                 <button className="col-md-3 btn btn-dark" onClick={onAddMonthlyClick}>Add Monthly Donations to Total</button>
-                <h4>Total Available General Funds: ${totalGeneral.toFixed(2)}</h4>
+                <h4>Total Available General Funds: ${notGiven * baseAmount - total.toFixed(2)}</h4>
                 {/* <h4>Total Funds (General + Specific): ${total.toFixed(2)}</h4> */}
             </div>
 

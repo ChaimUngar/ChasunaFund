@@ -77,7 +77,7 @@ const ViewDetails = () => {
                         <h4 className='text-center'>{`Chassan: ${chassan}`}</h4>
                         <h4 className='text-center'>{`Kallah: ${kallah}`}</h4>
                         <h4 className='text-center'>{`Neighborhood Side: ${neighborhoodSide}`}</h4>
-                        <h4 className='text-center'>{`Date of Chasuna: ${date}`}</h4>
+                        <h4 className='text-center'>{`Date of Chasuna: ${formatDate(date)}`}</h4>
                         <br />
                         <br />
                         <h3 className='text-center'>{`Total Funds: $${grandTotal.toFixed(2)}`}</h3>

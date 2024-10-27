@@ -26,7 +26,7 @@ const ChasunaRow = ({ chasuna }) => {
     }
 
     return (
-        <tr className={givenFunds ? "table-success" : ""}>
+        <tr className={given ? "table-success" : ""}>
             <td>Rabbi {rabbi} & Mrs. {mrs}</td>
             <td>{neighbor}</td>
             <td>{formatDate(date)}</td>

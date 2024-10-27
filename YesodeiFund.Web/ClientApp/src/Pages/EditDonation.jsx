@@ -62,15 +62,15 @@ const EditDonation = () => {
                             <div>
                                 <input type="radio" name="methodOfDonation" id="Method" value="Cash"
                                     onChange={onInputChange} checked={methodOfDonation === "Cash"}/>
-                                <label>Cash</label>
+                                <label> Cash</label>
                                 <br />
                                 <input type="radio" name="methodOfDonation" id="Method" value="Check"
                                     onChange={onInputChange} checked={methodOfDonation === "Check"}/>
-                                <label>Check</label>
+                                <label> Check</label>
                                 <br />
                                 <input type="radio" name="methodOfDonation" id="Method" value="Card"
                                     onChange={onInputChange} checked={methodOfDonation === "Card"}/>
-                                <label>Card</label>
+                                <label> Card</label>
                                 <br />
                             </div>
 

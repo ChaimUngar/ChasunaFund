@@ -47,7 +47,7 @@ namespace YesodeiFund.Web.Controllers
         public void Add(AddChasunaVM vm)
         {
             var repo = new ChasunaRepo(_connectionString);
-            
+
             repo.Add(new Chasuna
             {
                 Neighbor = vm.Neighbor,
@@ -56,7 +56,8 @@ namespace YesodeiFund.Web.Controllers
                 NeighborhoodSide = vm.NeighborhoodSide,
                 Date = vm.Date,
                 Rabbi = vm.Rabbi,
-                Mrs = vm.Mrs
+                Mrs = vm.Mrs,
+                EntryDate = DateTime.Now
             });
         }
 
@@ -73,7 +74,7 @@ namespace YesodeiFund.Web.Controllers
         public Chasuna GetById(int id)
         {
             var repo = new ChasunaRepo(_connectionString);
-            return repo.GetById(id);           
+            return repo.GetById(id);
         }
 
         [HttpPost]

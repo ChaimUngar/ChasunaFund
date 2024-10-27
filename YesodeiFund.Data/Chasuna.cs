@@ -18,6 +18,7 @@ namespace YesodeiFund.Data
         public string NeighborhoodSide { get; set; }
         public DateTime Date { get; set; }
         public bool GivenFunds { get; set; }
+        public DateTime EntryDate { get; set; }
 
         [JsonIgnore]
         public List<GeneralDonation> Donations { get; set; }
