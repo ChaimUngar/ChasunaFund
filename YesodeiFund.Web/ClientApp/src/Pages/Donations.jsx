@@ -17,7 +17,6 @@ const Donations = () => {
 
     const generalDonations = donations.filter(d => !d.chasunaId)
     const notGiven = chasunas.length - givenChasunaIds.length
-    console.log({ notGiven })
     const availableDonations = donations.filter(d => !givenChasunaIds.includes(d.chasunaId))
 
     const getDonations = async () => {
