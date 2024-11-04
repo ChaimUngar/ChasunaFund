@@ -43,7 +43,6 @@ const Donations = () => {
 
     for (let i = 0; i < availableDonations.length; i++) {
         total += availableDonations[i].amount * availableDonations[i].timesDonated
-        console.log({ total })
     }
 
     // for (let i = 0; i < generalDonations.length; i++) {
