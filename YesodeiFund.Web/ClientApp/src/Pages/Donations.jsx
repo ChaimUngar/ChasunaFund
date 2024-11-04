@@ -17,6 +17,7 @@ const Donations = () => {
 
     const generalDonations = donations.filter(d => !d.chasunaId)
     const notGiven = chasunas.length - givenChasunaIds.length
+    console.log({ notGiven })
     const availableDonations = donations.filter(d => !givenChasunaIds.includes(d.chasunaId))
 
     const getDonations = async () => {
@@ -42,6 +43,7 @@ const Donations = () => {
 
     for (let i = 0; i < availableDonations.length; i++) {
         total += availableDonations[i].amount * availableDonations[i].timesDonated
+        console.log({ total })
     }
 
     // for (let i = 0; i < generalDonations.length; i++) {
@@ -66,7 +68,7 @@ const Donations = () => {
                 <h1 className="col-md-10">Donations</h1>
                 <Link to="/view-monthly" className="col-md-3 btn btn-dark">View Monthly Donations</Link>
                 <button className="col-md-3 btn btn-dark" onClick={onAddMonthlyClick}>Add Monthly Donations to Total</button>
-                <h4>Total Available General Funds: ${notGiven * baseAmount - total.toFixed(2)}</h4>
+                <h4>Total Available General Funds: ${chasunas.length ? total.toFixed(2) - (notGiven * baseAmount) : total.toFixed(2)}</h4>
                 {/* <h4>Total Funds (General + Specific): ${total.toFixed(2)}</h4> */}
             </div>
 
