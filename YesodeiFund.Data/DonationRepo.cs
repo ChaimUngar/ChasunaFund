@@ -15,13 +15,25 @@ namespace YesodeiFund.Data
             _connectionString = connectionString;
         }
 
-        public void Add(GeneralDonation donation)
+        public void Add(GeneralDonation d)
         {
             var context = new FundDataContext(_connectionString);
-            donation.TimesDonated = 1;
-            donation.EntryDate = DateTime.Now;
-            context.GeneralDonations.Add(donation);
+            d.ActiveMonthly = d.Monthly;
+            context.GeneralDonations.Add(d);
             context.SaveChanges();
+
+            if (d.Monthly == true)
+            {
+                context.Monthly.Add(new Monthly
+                {
+                    Method = d.MethodOfDonation,
+                    Month = DateTime.Now,
+                    WentThru = true,
+                    DonationId = d.Id,
+                    Amount = d.Amount
+                });
+                context.SaveChanges();
+            }
         }
 
         public List<GeneralDonation> Get()
@@ -47,7 +59,22 @@ namespace YesodeiFund.Data
         public void AddMonthlyToTotal()
         {
             var context = new FundDataContext(_connectionString);
-            context.Database.ExecuteSqlInterpolated($"UPDATE GeneralDonations SET TimesDonated = TimesDonated + 1 WHERE Monthly = 1");
+            var monthly = context.GeneralDonations.Where(d => d.ActiveMonthly == true).ToList();
+
+            var toAdd = new List<Monthly>();
+            foreach (var m in monthly)
+            {
+                toAdd.Add(new Monthly
+                {
+                    Month = DateTime.Now,
+                    Method = m.MethodOfDonation,
+                    WentThru = true,
+                    Amount = m.Amount,
+                    DonationId = m.Id
+                });
+            }
+
+            context.Monthly.AddRange(toAdd);
             context.SaveChanges();
         }
 
@@ -63,6 +90,12 @@ namespace YesodeiFund.Data
             return context.GeneralDonations.Where(d => d.Monthly == true).ToList();
         }
 
+        public List<GeneralDonation> GetOneTimeDonations()
+        {
+            var context = new FundDataContext(_connectionString);
+            return context.GeneralDonations.Where(d => d.Monthly == false).ToList();
+        }
+
         public Donation GetById(int id)
         {
             var context = new FundDataContext(_connectionString);
@@ -70,7 +103,7 @@ namespace YesodeiFund.Data
 
             if (gDonation == null)
             {
-                var sDonation =  context.SpecificDonations.Include(d => d.Chasuna).FirstOrDefault(d => d.Id == id);
+                var sDonation = context.SpecificDonations.Include(d => d.Chasuna).FirstOrDefault(d => d.Id == id);
                 return new Donation
                 {
                     Id = sDonation.Id,
@@ -81,7 +114,8 @@ namespace YesodeiFund.Data
                     Date = sDonation.Date,
                     Chasuna = sDonation.Chasuna,
                     ChasunaId = sDonation.ChasunaId,
-                    MethodOfDonation = sDonation.MethodOfDonation
+                    MethodOfDonation = sDonation.MethodOfDonation,
+                    Notes = sDonation.Notes
                 };
             }
 
@@ -94,7 +128,8 @@ namespace YesodeiFund.Data
                 PhoneNumber = gDonation.PhoneNumber,
                 Date = gDonation.Date,
                 Monthly = gDonation.Monthly,
-                MethodOfDonation = gDonation.MethodOfDonation
+                MethodOfDonation = gDonation.MethodOfDonation,
+                Notes = gDonation.Notes
             };
         }
 
@@ -103,7 +138,7 @@ namespace YesodeiFund.Data
             var context = new FundDataContext(_connectionString);
             context.Database.ExecuteSqlInterpolated
                 ($@"UPDATE GeneralDonations SET 
-                FirstName = {d.FirstName}, LastName = {d.LastName}, PhoneNumber = {d.PhoneNumber},
+                FirstName = {d.FirstName}, LastName = {d.LastName}, PhoneNumber = {d.PhoneNumber}, Notes = {d.Notes}
                 Amount = {d.Amount}, Date = {d.Date}, Monthly = {d.Monthly}, MethodOfDonation = {d.MethodOfDonation}
                 WHERE Id = {d.Id}");
 
@@ -116,9 +151,46 @@ namespace YesodeiFund.Data
             var context = new FundDataContext(_connectionString);
             context.Database.ExecuteSqlInterpolated
                 ($@"UPDATE SpecificDonations SET 
-                FirstName = {d.FirstName}, LastName = {d.LastName}, PhoneNumber = {d.PhoneNumber},
+                FirstName = {d.FirstName}, LastName = {d.LastName}, PhoneNumber = {d.PhoneNumber}, Notes = {d.Notes}
                 Amount = {d.Amount}, Date = {d.Date}, ChasunaId = {d.ChasunaId}, MethodOfDonation = {d.MethodOfDonation}
                 WHERE Id = {d.Id}");
+
+            context.SaveChanges();
+        }
+
+        public GeneralDonation GetGeneralDetails(int id)
+        {
+            var context = new FundDataContext(_connectionString);
+            return (GeneralDonation)context.GeneralDonations.Include(d => d.MonthlyDetails).FirstOrDefault(d => d.Id == id);
+        }
+
+        public void UpdateMonthly(Monthly m)
+        {
+            var context = new FundDataContext(_connectionString);
+            context.Database.ExecuteSqlInterpolated
+                ($@"UPDATE Monthly SET 
+                Method = {m.Method}, WentThru = {m.WentThru}
+                WHERE Id = {m.Id}");
+
+            context.SaveChanges();
+        }
+
+        public List<Monthly> GetMonthlyDetails()
+        {
+            var context = new FundDataContext(_connectionString);
+            return context.Monthly.Where(d => d.WentThru == true).ToList();
+        }
+
+        public void SwitchIfMonthly(int id)
+        {
+            var context = new FundDataContext(_connectionString);
+
+            var donation = context.GeneralDonations.FirstOrDefault(d => d.Id == id);
+
+            context.Database.ExecuteSqlInterpolated
+                ($@"UPDATE GeneralDonations SET 
+                ActiveMonthly = {!donation.ActiveMonthly}
+                WHERE Id = {id}");
 
             context.SaveChanges();
         }

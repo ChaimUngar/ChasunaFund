@@ -11,17 +11,22 @@ const Donations = () => {
     const [searchedDonations, setSearchedDonations] = useState([])
     const [givenChasunaIds, setGivenChasunaIds] = useState([])
     const [chasunas, setChasunas] = useState([])
+    const [availableFunds, setAvailableFunds] = useState([])
     const baseAmount = 2000
     let total = 0
     let totalGeneral = 0
 
     const generalDonations = donations.filter(d => !d.chasunaId)
     const notGiven = chasunas.length - givenChasunaIds.length
-    const availableDonations = donations.filter(d => !givenChasunaIds.includes(d.chasunaId))
 
     const getDonations = async () => {
         const { data } = await axios.get('/api/donations/get-all')
         setDonations(data)
+    }
+
+    const getAvailableFunds = async () => {
+        const { data } = await axios.get('api/donations/get-available-funds')
+        setAvailableFunds(data)
     }
 
     const getGivenChasunaIds = async () => {
@@ -38,10 +43,11 @@ const Donations = () => {
         getDonations()
         getGivenChasunaIds()
         getChasunas()
+        getAvailableFunds()
     }, [])
 
-    for (let i = 0; i < availableDonations.length; i++) {
-        total += availableDonations[i].amount * availableDonations[i].timesDonated
+    for (let i = 0; i < availableFunds.length; i++) {
+        total += availableFunds[i].amount
     }
 
     // for (let i = 0; i < generalDonations.length; i++) {
@@ -52,6 +58,7 @@ const Donations = () => {
 
     const onAddMonthlyClick = async () => {
         await axios.post('/api/donations/add-monthly-to-total')
+        getAvailableFunds()
         getDonations()
     }
 
@@ -64,9 +71,19 @@ const Donations = () => {
         <div className="container" style={{ marginTop: '80px' }}>
             <div className="row">
                 <h1 className="col-md-10">Donations</h1>
-                <Link to="/view-monthly" className="col-md-3 btn btn-dark">View Monthly Donations</Link>
-                <button className="col-md-3 btn btn-dark" onClick={onAddMonthlyClick}>Add Monthly Donations to Total</button>
-                <h4>Total Available General Funds: ${chasunas.length ? total.toFixed(2) - (notGiven * baseAmount) : total.toFixed(2)}</h4>
+                <div>
+                    <Link to="/view-monthly" className="col-md-3 btn btn-dark">View Monthly Donations</Link>
+                    <Link to="/view-one-time" className="col-md-3 btn btn-dark">View One Time Donations</Link>
+                    <Link to="/view-specific" className="col-md-3 btn btn-dark">View Specific Donations</Link>
+                    <br />
+                </div>
+
+                <div>
+                    <button className="col-md-3 btn btn-dark" onClick={onAddMonthlyClick}>Add Monthly Donations to Total</button>
+                </div>
+                <h4>Total Available General Funds: ${total - (givenChasunaIds.length * baseAmount)} {/*${chasunas.length ? total.toFixed(2) - (notGiven * baseAmount) : total.toFixed(2)}*/}</h4>
+                <h4>Chasunas To Recieve Funds: {notGiven}</h4>
+                <h4>Chasunas Already Recieved Funds: {givenChasunaIds.length}</h4>
                 {/* <h4>Total Funds (General + Specific): ${total.toFixed(2)}</h4> */}
             </div>
 

@@ -63,9 +63,10 @@ namespace YesodeiFund.Web.Controllers
                 Amount = d.Amount,
                 Date = d.Date,
                 Monthly = d.Monthly,
-                TimesDonated = d.TimesDonated,
                 PhoneNumber = d.PhoneNumber,
-                MethodOfDonation = d.MethodOfDonation
+                MethodOfDonation = d.MethodOfDonation,
+                Notes = d.Notes,
+                ActiveMonthly = d.ActiveMonthly
             });
             var specific = GetSpecificDonations().Select(d => new Donation
             {
@@ -75,16 +76,40 @@ namespace YesodeiFund.Web.Controllers
                 Amount = d.Amount,
                 Date = d.Date,
                 ChasunaId = d.ChasunaId,
-                TimesDonated = 1,
                 PhoneNumber = d.PhoneNumber,
                 Chasuna = d.Chasuna,
-                MethodOfDonation = d.MethodOfDonation
+                MethodOfDonation = d.MethodOfDonation,
+                Notes = d.Notes
             });
 
             list.AddRange(general);
             list.AddRange(specific);
 
             return list.OrderBy(d => d.Date).ToList();
+        }
+
+        [HttpGet]
+        [Route("get-available-funds")]
+        public List<Donation> GetAvailableFunds()
+        {
+            var repo = new DonationRepo(_connectionString);
+            var list = new List<Donation>();
+
+            var general = GetDonations().Where(d => d.Monthly == false).Select(d => new Donation
+            {
+                Id = d.Id,
+                Amount = d.Amount,
+            });
+            var monthly = repo.GetMonthlyDetails().Select(d => new Donation
+            {
+                Id = d.Id,
+                Amount = d.Amount,
+            });
+
+            list.AddRange(general);
+            list.AddRange(monthly);
+
+            return list;
         }
 
         [HttpPost]
@@ -112,6 +137,14 @@ namespace YesodeiFund.Web.Controllers
         }
 
         [HttpGet]
+        [Route("get-one-time")]
+        public List<GeneralDonation> GetOneTime()
+        {
+            var repo = new DonationRepo(_connectionString);
+            return repo.GetOneTimeDonations();
+        }
+
+        [HttpGet]
         [Route("get-by-id")]
         public Donation GetById(int id)
         {
@@ -135,5 +168,34 @@ namespace YesodeiFund.Web.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("get-general-details")]
+        public GeneralDonation GetDetails(int id)
+        {
+            var repo = new DonationRepo(_connectionString);
+            return repo.GetGeneralDetails(id);
+        }
+
+        [HttpPost]
+        [Route("update-monthly")]
+        public void UpdateMonthly(UpdateMonthlyVM vm)
+        {
+            var repo = new DonationRepo(_connectionString);
+            repo.UpdateMonthly(new Monthly
+            {
+                Id = vm.Id,
+                Method = vm.MethodOfDonation,
+                WentThru = vm.WentThru
+            });
+        }
+
+        [HttpPost]
+        [Route("set-monthly")]
+        public void SetIfMonthly(int id)
+        {
+            var repo = new DonationRepo(_connectionString);
+            repo.SwitchIfMonthly(id);
+        }
+ 
     }
 }

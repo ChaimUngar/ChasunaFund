@@ -8,7 +8,7 @@ const EditDonation = () => {
     const [donation, setDonation] = useState({})
     const [chasunas, setChasunas] = useState([])
 
-    const { amount, firstName, lastName, phoneNumber, date, monthly, chasunaId, methodOfDonation } = donation
+    const { amount, firstName, lastName, phoneNumber, date, monthly, chasunaId, methodOfDonation, notes } = donation
     const isValid = firstName && amount && date && phoneNumber && lastName && methodOfDonation
 
     const { id } = useParams()
@@ -61,15 +61,15 @@ const EditDonation = () => {
 
                             <div>
                                 <input type="radio" name="methodOfDonation" id="Method" value="Cash"
-                                    onChange={onInputChange} checked={methodOfDonation === "Cash"}/>
+                                    onChange={onInputChange} checked={methodOfDonation === "Cash"} />
                                 <label> Cash</label>
                                 <br />
                                 <input type="radio" name="methodOfDonation" id="Method" value="Check"
-                                    onChange={onInputChange} checked={methodOfDonation === "Check"}/>
+                                    onChange={onInputChange} checked={methodOfDonation === "Check"} />
                                 <label> Check</label>
                                 <br />
                                 <input type="radio" name="methodOfDonation" id="Method" value="Card"
-                                    onChange={onInputChange} checked={methodOfDonation === "Card"}/>
+                                    onChange={onInputChange} checked={methodOfDonation === "Card"} />
                                 <label> Card</label>
                                 <br />
                             </div>
@@ -107,6 +107,11 @@ const EditDonation = () => {
                             <input type="date" name="date" placeholder="Date of Donation" className="form-control"
                                 value={date} onChange={onInputChange} />
 
+                            <br />
+
+                            <textarea rows="5" className="form-control" name="notes" placeholder="Notes"
+                                onChange={onInputChange} value={notes}>
+                            </textarea>
                             <br />
 
                             <button className="btn btn-dark" type="submit" disabled={!isValid}>Update</button>

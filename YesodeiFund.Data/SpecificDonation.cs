@@ -17,6 +17,7 @@ namespace YesodeiFund.Data
         public string PhoneNumber { get; set; }
         public string MethodOfDonation { get; set; }
         public DateTime EntryDate { get; set; }
+        public string Notes { get; set; }
 
         public Chasuna Chasuna { get; set; }
     }

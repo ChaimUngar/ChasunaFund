@@ -1,8 +1,13 @@
 import { Link } from "react-router-dom"
+import axios from "axios"
+import { useNavigate } from "react-router-dom"
+import { useState } from "react"
 
 const DonationRow = ({ donation, given }) => {
 
-    const { firstName, lastName, amount, monthly, date, chasunaId, timesDonated, phoneNumber, methodOfDonation } = donation
+    const { id, firstName, lastName, amount, monthly, date, chasunaId, timesDonated, phoneNumber, methodOfDonation, activeMonthly } = donation
+    const navigate = useNavigate()
+    const [active, setActive] = useState(activeMonthly)
 
     const formatDate = (date) => {
         var options = {
@@ -12,6 +17,11 @@ const DonationRow = ({ donation, given }) => {
         }
 
         return new Date(date).toLocaleDateString([], options)
+    }
+
+    const onButtonClick = async () => {
+        setActive(!active)
+        await axios.post(`/api/donations/set-monthly?id=${id}`)
     }
 
     return (
@@ -28,6 +38,17 @@ const DonationRow = ({ donation, given }) => {
             <td>
                 <Link to={`/edit-donation/${donation.id}`}>Edit Donation</Link>
             </td>
+            {monthly &&
+                <td>
+                    <Link to={`/view-donation/${donation.id}`}>View Details</Link>
+                </td>
+            }
+            {monthly &&
+                <td>
+                    <button className={active ? 'btn btn-danger' : 'btn btn-success'}
+                        onClick={onButtonClick}>{active ? 'Deactivate' : 'Activate'}</button>
+                </td>
+            }
         </tr>
     )
 }

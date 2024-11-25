@@ -11,6 +11,9 @@ import ViewDetails from './Pages/ViewDetails';
 import ViewMonthly from './Pages/ViewMonthly';
 import EditDonation from './Pages/EditDonation';
 import EditChasuna from './Pages/EditChasuna';
+import ViewDonation from './Pages/ViewDonation';
+import ViewOneTime from './Pages/ViewOneTime';
+import ViewSpecific from './Pages/ViewSpecific';
 
 const App = () => {
     return (
@@ -24,8 +27,11 @@ const App = () => {
                 <Route path='/chasunas' element={<Chasunas />} />
                 <Route path='/view-details/:id' element={<ViewDetails />} />  
                 <Route path='/view-monthly' element={<ViewMonthly />} /> 
+                <Route path='/view-specific' element={<ViewSpecific/>} /> 
+                <Route path='/view-one-time' element={<ViewOneTime />} /> 
                 <Route path='/edit-donation/:id' element={<EditDonation />} />  
-                <Route path='/edit-chasuna/:id' element={<EditChasuna />} />                                                                                        
+                <Route path='/edit-chasuna/:id' element={<EditChasuna />} />    
+                <Route path='/view-donation/:id' element={<ViewDonation />} />                                                                                                                                                                            
             </Routes>
         </Layout>
     );

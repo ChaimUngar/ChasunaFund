@@ -1,6 +1,6 @@
-const DetailRow = ({ donation }) => {
+const SpecificRow = ({ donation }) => {
 
-    const { firstName, lastName, amount, date, methodOfDonation } = donation
+    const { firstName, lastName, amount, date, methodOfDonation, chasuna } = donation
 
     const formatDate = (date) => {
         var options = {
@@ -16,10 +16,11 @@ const DetailRow = ({ donation }) => {
         <tr>
             <td>{lastName}, {firstName}</td>
             <td>{`$${amount.toFixed(2)}`}</td>
+            <td>{chasuna.neighbor}'s Chasuna</td>
             <td>{methodOfDonation}</td>
             <td>{formatDate(date)}</td>
         </tr>
     )
 }
 
-export default DetailRow
+export default SpecificRow

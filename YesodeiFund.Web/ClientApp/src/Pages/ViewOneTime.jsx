@@ -3,7 +3,7 @@ import axios from "axios"
 import MonthlyOneTimeRow from "../components/MonthlyOneTimeRow"
 import { Link } from "react-router-dom"
 
-const ViewMonthly = () => {
+const ViewOneTime = () => {
 
     const [donations, setDonations] = useState([])
     const [searchedDonations, setSearchedDonations] = useState([])
@@ -11,7 +11,7 @@ const ViewMonthly = () => {
 
     useEffect(() => {
         const getDonations = async () => {
-            const { data } = await axios.get('/api/donations/get-monthly')
+            const { data } = await axios.get('/api/donations/get-one-time')
             setDonations(data)
         }
 
@@ -28,7 +28,7 @@ const ViewMonthly = () => {
         <div>
             <div className="container" style={{ marginTop: '80px' }}>
                 <div className="row">
-                    <h1 className="col-md-10">Monthly Donations</h1>
+                    <h1 className="col-md-10">One Time Donations</h1>
                     <Link to="/donations" className="col md-3 btn btn-dark">View All Donations</Link>
                 </div>
                 <br />
@@ -54,4 +54,4 @@ const ViewMonthly = () => {
     )
 }
 
-export default ViewMonthly
+export default ViewOneTime

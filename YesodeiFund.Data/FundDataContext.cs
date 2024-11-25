@@ -27,4 +27,5 @@ public class FundDataContext : DbContext
     public DbSet<Chasuna> Chasunas { get; set; }
     public DbSet<GeneralDonation> GeneralDonations { get; set; }
     public DbSet<SpecificDonation> SpecificDonations { get; set; }
+    public DbSet<Monthly> Monthly { get; set; }
 }

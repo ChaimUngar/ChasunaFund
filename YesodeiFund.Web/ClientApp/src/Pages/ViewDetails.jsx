@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import DetailRow from '../components/DetailRow'
+import DetailRow from '../components/MonthlyOneTimeRow'
 
 const baseAmount = 2000
 

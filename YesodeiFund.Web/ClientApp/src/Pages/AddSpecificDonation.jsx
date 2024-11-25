@@ -13,6 +13,7 @@ const AddSpecificDonation = () => {
     const [allChasunas, setAllChasunas] = useState([])
     const [date, setDate] = useState()
     const [method, setMethod] = useState()
+    const [notes, setNotes] = useState('')
 
     const isValid = firstName && lastName && amount && date && number && method
     const navigate = useNavigate()
@@ -50,9 +51,13 @@ const AddSpecificDonation = () => {
         setDate(e.target.value)
     }
 
+    const onNotesChange = (e) => {
+        setNotes(e.target.value)
+    }
+
     const onAddClick = async (e) => {
         e.preventDefault()
-        await axios.post('/api/donations/add-specific', { amount, firstName, lastName, chasunaId, date, phoneNumber: number, methodOfDonation: method })
+        await axios.post('/api/donations/add-specific', { amount, firstName, lastName, chasunaId, date, phoneNumber: number, methodOfDonation: method, notes })
         navigate('/donations')
     }
 
@@ -106,6 +111,11 @@ const AddSpecificDonation = () => {
                             <input type="date" name="date" placeholder="Date of Donation" className="form-control"
                                 value={date} onChange={onDateChange} />
 
+                            <br />
+
+                            <textarea rows="5" className="form-control" name="notes" placeholder="Notes"
+                                onChange={onNotesChange} value={notes}>
+                            </textarea>
                             <br />
 
                             <button className="btn btn-dark" disabled={!isValid} type="submit">Add</button>

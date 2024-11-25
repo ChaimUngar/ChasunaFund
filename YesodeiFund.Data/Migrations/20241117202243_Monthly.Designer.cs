@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using YesodeiFund.Data;
 
@@ -11,9 +12,11 @@ using YesodeiFund.Data;
 namespace YesodeiFund.Data.Migrations
 {
     [DbContext(typeof(FundDataContext))]
-    partial class FundDataContextModelSnapshot : ModelSnapshot
+    [Migration("20241117202243_Monthly")]
+    partial class Monthly
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,9 +73,6 @@ namespace YesodeiFund.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("ActiveMonthly")
-                        .HasColumnType("bit");
-
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
@@ -97,47 +97,17 @@ namespace YesodeiFund.Data.Migrations
                     b.Property<bool>("Monthly")
                         .HasColumnType("bit");
 
-                    b.Property<string>("Notes")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("TimesDonated")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ChasunaId");
 
                     b.ToTable("GeneralDonations");
-                });
-
-            modelBuilder.Entity("YesodeiFund.Data.Monthly", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("DonationId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Method")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Month")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("WentThru")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("DonationId");
-
-                    b.ToTable("Monthly");
                 });
 
             modelBuilder.Entity("YesodeiFund.Data.SpecificDonation", b =>
@@ -169,9 +139,6 @@ namespace YesodeiFund.Data.Migrations
                     b.Property<string>("MethodOfDonation")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Notes")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
@@ -190,17 +157,6 @@ namespace YesodeiFund.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
                 });
 
-            modelBuilder.Entity("YesodeiFund.Data.Monthly", b =>
-                {
-                    b.HasOne("YesodeiFund.Data.GeneralDonation", "Donation")
-                        .WithMany("MonthlyDetails")
-                        .HasForeignKey("DonationId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Donation");
-                });
-
             modelBuilder.Entity("YesodeiFund.Data.SpecificDonation", b =>
                 {
                     b.HasOne("YesodeiFund.Data.Chasuna", "Chasuna")
@@ -215,11 +171,6 @@ namespace YesodeiFund.Data.Migrations
             modelBuilder.Entity("YesodeiFund.Data.Chasuna", b =>
                 {
                     b.Navigation("Donations");
-                });
-
-            modelBuilder.Entity("YesodeiFund.Data.GeneralDonation", b =>
-                {
-                    b.Navigation("MonthlyDetails");
                 });
 #pragma warning restore 612, 618
         }
