@@ -12,7 +12,6 @@ const Donations = () => {
     const [givenChasunaIds, setGivenChasunaIds] = useState([])
     const [chasunas, setChasunas] = useState([])
     const [availableFunds, setAvailableFunds] = useState([])
-    const baseAmount = 2000
     let total = 0
     let totalGeneral = 0
 
@@ -50,6 +49,13 @@ const Donations = () => {
         total += availableFunds[i].amount
     }
 
+    const givenChasunas = chasunas.filter(c => givenChasunaIds.includes(c.id))
+    console.log({givenChasunas})
+    let totalBaseAmounts = 0
+    for (let i = 0; i < givenChasunas.length; i++) {
+        totalBaseAmounts += givenChasunas[i].baseAmount
+    }
+
     // for (let i = 0; i < generalDonations.length; i++) {
     //     const notGiven = chasunas.length - givenChasunaIds.length
     //     totalGeneral += (generalDonations[i].amount * generalDonations[i].timesDonated) - ((notGiven * baseAmount))
@@ -81,7 +87,8 @@ const Donations = () => {
                 <div>
                     <button className="col-md-3 btn btn-dark" onClick={onAddMonthlyClick}>Add Monthly Donations to Total</button>
                 </div>
-                <h4>Total Available General Funds: ${total - (givenChasunaIds.length * baseAmount)} {/*${chasunas.length ? total.toFixed(2) - (notGiven * baseAmount) : total.toFixed(2)}*/}</h4>
+                {/* <h4>Total Available General Funds: ${total - (givenChasunaIds.length * baseAmount)} ${chasunas.length ? total.toFixed(2) - (notGiven * baseAmount) : total.toFixed(2)}</h4> */}
+                <h4>Total Available General Funds: ${total - totalBaseAmounts}</h4>
                 <h4>Chasunas To Recieve Funds: {notGiven}</h4>
                 <h4>Chasunas Already Recieved Funds: {givenChasunaIds.length}</h4>
                 {/* <h4>Total Funds (General + Specific): ${total.toFixed(2)}</h4> */}

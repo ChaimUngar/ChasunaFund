@@ -7,7 +7,7 @@ const EditChasuna = () => {
 
     const [chasuna, setChasuna] = useState({})
 
-    const { neighbor, chassan, kallah, neighborhoodSide, date, rabbi, mrs } = chasuna
+    const { neighbor, chassan, kallah, neighborhoodSide, date, rabbi, mrs, baseAmount } = chasuna
 
     const isValid = neighbor && chassan && kallah && neighborhoodSide && date && rabbi && mrs
     const navigate = useNavigate()
@@ -55,18 +55,22 @@ const EditChasuna = () => {
 
                             <div>
                                 <input type="radio" name="neighborhoodSide" value="Chassan" id="Chassan"
-                                    onChange={onInputChange} checked={neighborhoodSide === "Chassan"}/>
+                                    onChange={onInputChange} checked={neighborhoodSide === "Chassan"} />
                                 <label><input className="form-control" type="text" name="chassan" placeholder="Chassan"
                                     value={chassan} onChange={onInputChange} /></label>
 
                                 <br />
 
                                 <input type="radio" name="neighborhoodSide" value="Kallah" id="Kallah"
-                                    onChange={onInputChange} checked={neighborhoodSide === "Kallah"}/>
+                                    onChange={onInputChange} checked={neighborhoodSide === "Kallah"} />
                                 <label><input className="form-control" type="text" name="kallah" placeholder="Kallah"
                                     value={kallah} onChange={onInputChange} /></label>
                             </div>
 
+                            <br />
+
+                            <input type="number" name="amount" placeholder="Amount" className="form-control"
+                                value={baseAmount} onChange={onInputChange} />
                             <br />
 
                             <input type="date" name="date" placeholder="Date of Chasuna" className="form-control"

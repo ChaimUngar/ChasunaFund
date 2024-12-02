@@ -12,6 +12,7 @@ const AddChasuna = () => {
     const [mrs, setMrs] = useState('')
     const [neighborhoodSide, setNeighborhoodSide] = useState()
     const [date, setDate] = useState()
+    const [baseAmount, setBaseAmount] = useState()
 
     const isValid = neighbor && chassan && kallah && neighborhoodSide && date && rabbi && mrs
     const navigate = useNavigate()
@@ -22,7 +23,7 @@ const AddChasuna = () => {
 
     const onAddClick = async (e) => {
         e.preventDefault()
-        await axios.post('/api/chasuna/add', { neighbor, chassan, kallah, neighborhoodSide, date, rabbi, mrs })
+        await axios.post('/api/chasuna/add', { neighbor, chassan, kallah, neighborhoodSide, date, rabbi, mrs, baseAmount })
         navigate('/chasunas')
     }
 
@@ -59,6 +60,10 @@ const AddChasuna = () => {
                                     value={kallah} onChange={e => setKallah(e.target.value)} /></label>
                             </div>
 
+                            <br />
+
+                            <input type="number" name="amount" placeholder="Base Amount" className="form-control"
+                                value={baseAmount} onChange={e => setBaseAmount(e.target.value)} />
                             <br />
 
                             <input type="date" name="date" placeholder="Date of Chasuna" className="form-control"

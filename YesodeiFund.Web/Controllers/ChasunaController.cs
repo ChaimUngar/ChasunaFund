@@ -38,7 +38,8 @@ namespace YesodeiFund.Web.Controllers
                 TotalFunds = donations.Where(d => d.ChasunaId == c.Id).Sum(d => d.Amount),
                 Rabbi = c.Rabbi,
                 Mrs = c.Mrs,
-                GivenFunds = c.GivenFunds
+                GivenFunds = c.GivenFunds,
+                BaseAmount = c.BaseAmount
             }).ToList();
         }
 
@@ -47,6 +48,11 @@ namespace YesodeiFund.Web.Controllers
         public void Add(AddChasunaVM vm)
         {
             var repo = new ChasunaRepo(_connectionString);
+
+            if (vm.BaseAmount < 1)
+            {
+                vm.BaseAmount = 0;
+            }
 
             repo.Add(new Chasuna
             {
@@ -57,7 +63,8 @@ namespace YesodeiFund.Web.Controllers
                 Date = vm.Date,
                 Rabbi = vm.Rabbi,
                 Mrs = vm.Mrs,
-                EntryDate = DateTime.Now
+                EntryDate = DateTime.Now,
+                BaseAmount = vm.BaseAmount
             });
         }
 

@@ -45,7 +45,7 @@ namespace YesodeiFund.Data
             var context = new FundDataContext(_connectionString);
             context.Database.ExecuteSqlInterpolated
                 ($@"UPDATE Chasunas SET 
-                Rabbi = {c.Rabbi}, Mrs = {c.Mrs}, Neighbor = {c.Neighbor}, Date = {c.Date},
+                Rabbi = {c.Rabbi}, Mrs = {c.Mrs}, Neighbor = {c.Neighbor}, Date = {c.Date}, BaseAmount = {c.BaseAmount}
                 Chassan = {c.Chassan}, Kallah = {c.Kallah}, NeighborhoodSide = {c.NeighborhoodSide}
                 WHERE Id = {c.Id}");
 

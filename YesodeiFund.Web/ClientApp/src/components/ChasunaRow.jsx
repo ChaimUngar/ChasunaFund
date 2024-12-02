@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom"
 import { useState } from "react"
 import axios from "axios"
-const baseAmount = 2000
+
 
 const ChasunaRow = ({ chasuna }) => {
+    
 
-    const { neighbor, date, totalFunds, rabbi, mrs, givenFunds, id } = chasuna
+    const { neighbor, date, totalFunds, rabbi, mrs, givenFunds, id, baseAmount } = chasuna
     const [given, setGiven] = useState(givenFunds)
 
     const formatDate = (date) => {

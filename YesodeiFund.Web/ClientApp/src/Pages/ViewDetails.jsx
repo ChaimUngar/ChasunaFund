@@ -3,8 +3,6 @@ import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import DetailRow from '../components/MonthlyOneTimeRow'
 
-const baseAmount = 2000
-
 const ViewDetails = () => {
 
     const [chasuna, setChasuna] = useState({})
@@ -12,12 +10,15 @@ const ViewDetails = () => {
     const [details, setDetails] = useState([])
     const { id } = useParams()
 
-    const { neighbor, chassan, kallah, neighborhoodSide, date, rabbi, mrs } = chasuna
+    const { neighbor, chassan, kallah, neighborhoodSide, date, rabbi, mrs, baseAmount } = chasuna
 
     useEffect(() => {
         const getById = async () => {
             const { data } = await axios.get(`/api/chasuna/get-by-id?id=${id}`)
+
             setChasuna(data)
+
+
         }
         const getTotal = async () => {
             const { data } = await axios.get(`/api/chasuna/get-total-for-chasuna?chasunaId=${id}`)
@@ -32,7 +33,12 @@ const ViewDetails = () => {
         getTotal()
         getDetails()
 
+
+
     }, [])
+
+
+
 
 
     const formatDate = (date) => {
@@ -45,9 +51,14 @@ const ViewDetails = () => {
         return new Date(date).toLocaleDateString([], options)
     }
 
+    // let grandTotal 
+    // { chasuna ? grandTotal = baseAmount + total : grandTotal = 0  }
+     console.log({chasuna})
+
     const grandTotal = baseAmount + total
 
     const donationTable = () => {
+
         return (
             <div>
                 <table className="table table-hover table-striped table-bordered table-hover">
@@ -67,8 +78,13 @@ const ViewDetails = () => {
         )
     }
 
+
+
     return (
+
+
         <div className="container" style={{ marginTop: '80px' }}>
+
             <div className="row">
                 <div className="col-md-6 offset-md-3">
                     <div className="card card-body bg-light">
@@ -81,10 +97,10 @@ const ViewDetails = () => {
                         <br />
                         <br />
                         <h3 className='text-center'>{`Total Funds: $${grandTotal.toFixed(2)}`}</h3>
-                        <h4 className='text-center'>{`Total General Funds: $${baseAmount.toFixed(2)}`}</h4>
+                        <h4 className='text-center'>{`Total General Funds: $${baseAmount}.00`}</h4>
                         <h4 className='text-center'>{`Total Specific Funds: $${total.toFixed(2)}`}</h4>
                         {!!details.length && donationTable()}
-                        
+
                     </div>
                 </div>
             </div>

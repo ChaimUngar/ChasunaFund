@@ -5,7 +5,7 @@ import { useState } from "react"
 
 const DonationRow = ({ donation, given }) => {
 
-    const { id, firstName, lastName, amount, monthly, date, chasunaId, timesDonated, phoneNumber, methodOfDonation, activeMonthly } = donation
+    const { id, firstName, lastName, amount, monthly, date, chasunaId, timesDonated, phoneNumber, methodOfDonation, activeMonthly, notes } = donation
     const navigate = useNavigate()
     const [active, setActive] = useState(activeMonthly)
 
@@ -26,9 +26,9 @@ const DonationRow = ({ donation, given }) => {
 
     return (
         <tr className={given ? "table-success" : ""}>
-            <td>{`${lastName}, ${firstName}`}</td>
+            <td>{`${lastName}, ${firstName} ${notes ? '*' : ''}`}</td>
             <td>{phoneNumber}</td>
-            <td>{monthly ? `$${amount.toFixed(2)} * ${timesDonated} months` : `$${amount.toFixed(2)}`}</td>
+            <td>{amount.toFixed(2)}</td>
             <td>{formatDate(date)}</td>
             <td>{methodOfDonation}</td>
             {!chasunaId &&
